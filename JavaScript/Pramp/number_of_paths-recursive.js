@@ -31,10 +31,31 @@ Constraints:
 [output] integer
 */
 
-i >= j;
-can go right or up
-up - (i, j + 1)
-east = (i + 1, j)
 function numOfPathsToDest(n) {
-
+  let grid = [];
+  for (let i = 0; i < n; i++) {
+    (grid[i] = []).length = n;
+    grid[i].fill(-1);
+  }
+  return numPathsToEnd(n-1, n-1, grid);
 }
+
+function numPathsToEnd(i, j, grid) {
+  // base cases to return
+  if(i < 0 || j < 0) {
+    return 0;
+  } else if(i < j) {
+    grid[i][j] = 0;
+  } else if(grid[i][j] !== -1) {
+    return grid[i][j];
+  } else if(i === 0 && j === 0) {
+    grid[i][j] = 1;
+  } else {
+    // recursive case going east and going North
+    grid[i][j] = numPathsToEnd(i - 1, j, grid) + numPathsToEnd(i, j - 1, grid);
+  }
+
+  return grid[i][j];
+}
+
+console.log(numOfPathsToDest(4));
